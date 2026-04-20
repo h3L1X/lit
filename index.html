@@ -4,50 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spot the Fake — CT Deepfake Quiz</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
-  .container { background: #fff; border-radius: 16px; padding: 2rem; max-width: 640px; width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-  .site-title { font-size: 13px; color: #888; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; }
-  h1 { font-size: 22px; font-weight: 600; color: #111; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.75rem; line-height: 1.5; }
-  .progress-bg { background: #eee; border-radius: 4px; height: 6px; margin-bottom: 1.5rem; }
-  .progress-fill { background: #2563eb; height: 6px; border-radius: 4px; transition: width 0.4s; }
-  .q-label { font-size: 12px; color: #888; margin-bottom: 0.4rem; }
-  .q-text { font-size: 17px; font-weight: 600; color: #111; margin-bottom: 1.25rem; line-height: 1.5; }
-  .image-box { background: #f8f8f8; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; text-align: center; }
-  .image-box img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 1px solid #ddd; display: block; margin: 0 auto; }
-  .img-error { width: 180px; height: 180px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 13px; color: #888; text-align: center; padding: 1rem; }
-  .img-label { font-size: 13px; color: #666; margin-top: 0.75rem; }
-  .headline-box { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
-  .headline-source { font-size: 11px; color: #aaa; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
-  .headline-main { font-size: 15px; font-weight: 600; color: #111; line-height: 1.4; margin-bottom: 0.75rem; }
-  .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-  .choice-btn { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem 1rem; font-size: 14px; color: #111; cursor: pointer; text-align: left; transition: background 0.15s; font-family: inherit; }
-  .choice-btn:hover { background: #f5f5f5; }
-  .choice-btn.correct { border-color: #16a34a; background: #f0fdf4; color: #15803d; }
-  .choice-btn.wrong { border-color: #dc2626; background: #fef2f2; color: #b91c1c; }
-  .choice-btn.reveal { border-color: #16a34a; background: #f0fdf4; color: #15803d; }
-  .feedback { border-radius: 8px; padding: 0.75rem 1rem; font-size: 14px; margin-bottom: 1rem; line-height: 1.6; }
-  .feedback.correct { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-  .feedback.wrong { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
-  .next-btn { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.6rem 1.25rem; font-size: 14px; color: #111; cursor: pointer; font-family: inherit; }
-  .next-btn:hover { background: #f5f5f5; }
-  .score-screen { text-align: center; padding: 1.5rem 0; }
-  .score-num { font-size: 52px; font-weight: 700; color: #111; }
-  .score-label { font-size: 15px; color: #666; margin-bottom: 1.5rem; }
-  .verdict { font-size: 18px; font-weight: 600; color: #111; margin-bottom: 0.75rem; }
-  .verdict-sub { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; }
-  .signs-section { text-align: left; background: #f8f8f8; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
-  .signs-title { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 0.75rem; }
-  .sign-item { display: flex; gap: 10px; margin-bottom: 0.6rem; align-items: flex-start; }
-  .sign-dot { width: 8px; height: 8px; border-radius: 50%; background: #2563eb; margin-top: 6px; flex-shrink: 0; }
-  .sign-text { font-size: 14px; color: #444; line-height: 1.5; }
-  .reg-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 1rem 1.25rem; font-size: 14px; color: #92400e; line-height: 1.6; margin-bottom: 1.5rem; text-align: left; }
-  .restart-btn { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.6rem 1.5rem; font-size: 14px; color: #111; cursor: pointer; font-family: inherit; }
-  .restart-btn:hover { background: #f5f5f5; }
-  @media (max-width: 480px) { .choice-grid { grid-template-columns: 1fr; } }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="container">
