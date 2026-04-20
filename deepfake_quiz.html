@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spot the Fake — CT Deepfake Quiz</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+  .container { background: #fff; border-radius: 16px; padding: 2rem; max-width: 640px; width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .site-title { font-size: 13px; color: #888; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  h1 { font-size: 22px; font-weight: 600; color: #111; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.75rem; line-height: 1.5; }
+  .progress-bg { background: #eee; border-radius: 4px; height: 6px; margin-bottom: 1.5rem; }
+  .progress-fill { background: #2563eb; height: 6px; border-radius: 4px; transition: width 0.4s; }
+  .q-label { font-size: 12px; color: #888; margin-bottom: 0.4rem; }
+  .q-text { font-size: 17px; font-weight: 600; color: #111; margin-bottom: 1.25rem; line-height: 1.5; }
+  .image-box { background: #f8f8f8; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; text-align: center; }
+  .image-box img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 1px solid #ddd; display: block; margin: 0 auto; }
+  .img-error { width: 180px; height: 180px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 13px; color: #888; text-align: center; padding: 1rem; }
+  .img-label { font-size: 13px; color: #666; margin-top: 0.75rem; }
+  .headline-box { background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+  .headline-source { font-size: 11px; color: #aaa; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .headline-main { font-size: 15px; font-weight: 600; color: #111; line-height: 1.4; margin-bottom: 0.75rem; }
+  .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .choice-btn { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem 1rem; font-size: 14px; color: #111; cursor: pointer; text-align: left; transition: background 0.15s; font-family: inherit; }
+  .choice-btn:hover { background: #f5f5f5; }
+  .choice-btn.correct { border-color: #16a34a; background: #f0fdf4; color: #15803d; }
+  .choice-btn.wrong { border-color: #dc2626; background: #fef2f2; color: #b91c1c; }
+  .choice-btn.reveal { border-color: #16a34a; background: #f0fdf4; color: #15803d; }
+  .feedback { border-radius: 8px; padding: 0.75rem 1rem; font-size: 14px; margin-bottom: 1rem; line-height: 1.6; }
+  .feedback.correct { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+  .feedback.wrong { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+  .next-btn { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.6rem 1.25rem; font-size: 14px; color: #111; cursor: pointer; font-family: inherit; }
+  .next-btn:hover { background: #f5f5f5; }
+  .score-screen { text-align: center; padding: 1.5rem 0; }
+  .score-num { font-size: 52px; font-weight: 700; color: #111; }
+  .score-label { font-size: 15px; color: #666; margin-bottom: 1.5rem; }
+  .verdict { font-size: 18px; font-weight: 600; color: #111; margin-bottom: 0.75rem; }
+  .verdict-sub { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .signs-section { text-align: left; background: #f8f8f8; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+  .signs-title { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 0.75rem; }
+  .sign-item { display: flex; gap: 10px; margin-bottom: 0.6rem; align-items: flex-start; }
+  .sign-dot { width: 8px; height: 8px; border-radius: 50%; background: #2563eb; margin-top: 6px; flex-shrink: 0; }
+  .sign-text { font-size: 14px; color: #444; line-height: 1.5; }
+  .reg-box { background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 1rem 1.25rem; font-size: 14px; color: #92400e; line-height: 1.6; margin-bottom: 1.5rem; text-align: left; }
+  .restart-btn { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.6rem 1.5rem; font-size: 14px; color: #111; cursor: pointer; font-family: inherit; }
+  .restart-btn:hover { background: #f5f5f5; }
+  @media (max-width: 480px) { .choice-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="site-title">Spot the Fake CT</div>
+  <h1>Could you spot a deepfake?</h1>
+  <p class="subtitle">AI-generated images and fake quotes are becoming harder to detect. Take this quiz to test your skills — then learn what to look for.</p>
+  <div id="quiz-area"></div>
+</div>
+
+<script>
+const images = [
+  { url: "https://drive.google.com/uc?export=view&id=1uFwKkFohDWmwOj3KNoVSXVC7B83Loaa6", label: "AI-generated portrait — examine the skin and hairline closely" },
+  { url: "https://drive.google.com/uc?export=view&id=1GMtOaD8f2H41buVWa6Xix0mhihzfmh0-", label: "AI-generated portrait — look at the edges of the face and hair" },
+  { url: "https://drive.google.com/uc?export=view&id=1AJURjVrjFxi5kOaS4NDzrGGqrrGaajcj", label: "AI-generated portrait — pay attention to the background details" }
+];
+
+const questions = [
+  {
+    type: "image", imgIndex: 0,
+    prompt: "This face was generated entirely by AI. Which clue is most likely to give it away?",
+    choices: ["Perfectly smooth, waxy-looking skin with no visible pores", "The subject is smiling", "The background is blurry", "The lighting looks natural"],
+    correct: 0,
+    feedback: "AI-generated faces often have unnaturally smooth skin with no visible pores or blemishes. Real human skin has texture, imperfections, and variation — AI struggles to replicate this convincingly."
+  },
+  {
+    type: "headline",
+    prompt: "One of these headlines is AI-generated fake news. Which one?",
+    headlines: [
+      { source: "CT Mirror", text: "Connecticut Senate passes AI bill criminalizing deepfake revenge porn in 24-12 vote" },
+      { source: "Hartford Courant", text: "Gov. Lamont signs executive order banning all social media platforms from Connecticut schools" }
+    ],
+    choices: ["CT Mirror headline", "Hartford Courant headline"],
+    correct: 1,
+    feedback: "The CT Mirror headline is real — Connecticut's Senate did pass that AI bill in 2024. The Courant headline is fabricated. Notice the sweeping language ('all social media', 'banning') — a common pattern in AI-generated political fake news."
+  },
+  {
+    type: "image", imgIndex: 1,
+    prompt: "AI image generators frequently fail at a specific part of the face. What should you examine here?",
+    choices: ["The ears look too small", "Hair strands blend unnaturally into the background or skin", "The eyes are too far apart", "The face is too symmetrical"],
+    correct: 1,
+    feedback: "AI generators frequently struggle with hair — especially where it meets skin or a background. Strands may blur, merge, or disappear entirely. This is one of the most reliable tells in AI-generated portraits."
+  },
+  {
+    type: "headline",
+    prompt: "Which of these quotes is AI-fabricated?",
+    headlines: [
+      { source: "CT Senate debate, 2024", text: "Sen. Saud Anwar (South Windsor): 'Not doing a bill on AI would be malpractice on the part of the legislative body.'" },
+      { source: "Hartford Courant", text: "Gov. Lamont: 'Connecticut will lead the nation in AI regulation — we have a moral obligation to act first and act boldly.'" }
+    ],
+    choices: ["Sen. Anwar quote", "Gov. Lamont quote"],
+    correct: 1,
+    feedback: "Sen. Anwar's quote is real and on record from the 2024 CT Senate AI debate. The Lamont quote is fabricated — in reality Lamont repeatedly opposed aggressive AI regulation. AI fakes often use confident, sweeping language that sounds plausible but doesn't match a person's actual record."
+  },
+  {
+    type: "image", imgIndex: 2,
+    prompt: "All images in this quiz were AI-generated. What is the most common tell in AI background details?",
+    choices: ["Backgrounds are always black", "Background details become warped, blurry, or structurally impossible", "Backgrounds are too colorful", "Backgrounds always show outdoor scenes"],
+    correct: 1,
+    feedback: "AI struggles with structural coherence in backgrounds — walls may warp, objects repeat strangely, or architecture becomes impossible. When something in the background looks off without a clear reason, that's a strong signal the image may be AI-generated."
+  },
+  {
+    type: "headline",
+    prompt: "A reporter shared this story on social media. Is it real or AI-generated?",
+    headlines: [
+      { source: "Cody Enterprise, Wyoming, 2024", text: "Governor's office: 'We have no record of that statement — it was never made.'" }
+    ],
+    choices: ["Real published denial", "AI-generated fake content"],
+    correct: 0,
+    feedback: "This is real. After reporter Aaron Pelczar used AI to fabricate a quote from Wyoming's governor in 2024, the governor's office issued exactly this denial after a competing journalist called to verify. The fake AI quote had passed through multiple human editors undetected — illustrating how convincing AI-generated content has become."
+  }
+];
+
+let current = 0, score = 0, answered = false;
+
+function render() {
+  const q = questions[current];
+  const pct = (current / questions.length) * 100;
+  let html = `
+    <div class="progress-bg"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="q-label">Question ${current + 1} of ${questions.length}</div>
+    <div class="q-text">${q.prompt}</div>
+  `;
+  if (q.type === "image") {
+    const img = images[q.imgIndex];
+    html += `<div class="image-box">
+      <img src="${img.url}" alt="AI generated portrait" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="img-error" style="display:none">Image could not load — answer based on what you know about AI tells</div>
+      <div class="img-label">${img.label}</div>
+    </div>`;
+  } else {
+    html += `<div class="headline-box">`;
+    q.headlines.forEach(h => {
+      html += `<div><div class="headline-source">${h.source}</div><div class="headline-main">"${h.text}"</div></div>`;
+    });
+    html += `</div>`;
+  }
+  html += `<div class="choice-grid">`;
+  q.choices.forEach((c, i) => {
+    html += `<button class="choice-btn" onclick="pick(${i})">${c}</button>`;
+  });
+  html += `</div><div id="fb"></div>`;
+  document.getElementById('quiz-area').innerHTML = html;
+}
+
+function pick(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  document.querySelectorAll('.choice-btn').forEach((b, idx) => {
+    b.onclick = null;
+    if (idx === q.correct) b.className = 'choice-btn reveal';
+    if (idx === i && i !== q.correct) b.className = 'choice-btn wrong';
+    if (idx === i && i === q.correct) b.className = 'choice-btn correct';
+  });
+  if (i === q.correct) score++;
+  document.getElementById('fb').innerHTML = `
+    <div class="feedback ${i === q.correct ? 'correct' : 'wrong'}">
+      <strong>${i === q.correct ? 'Correct.' : 'Not quite.'}</strong> ${q.feedback}
+    </div>
+    <button class="next-btn" onclick="next()">${current < questions.length - 1 ? 'Next question' : 'See results'}</button>
+  `;
+}
+
+function next() {
+  current++; answered = false;
+  if (current < questions.length) render(); else results();
+}
+
+function results() {
+  const p = Math.round((score / questions.length) * 100);
+  let v, s;
+  if (p >= 80) { v = "Strong result — but don't get overconfident."; s = "You spotted most of the fakes. But deepfake technology improves daily, and even trained experts are regularly fooled. The tells you learned today may not apply to next year's models."; }
+  else if (p >= 50) { v = "About average — and that's the problem."; s = "Most Connecticut residents score similarly. When roughly half of AI-generated content fools us, that's not a personal failure — it's a systemic crisis that requires regulatory solutions, not just individual vigilance."; }
+  else { v = "Difficult, right? That's exactly the point."; s = "You're not alone. Deepfakes are designed to be indistinguishable from reality. The difficulty you experienced is why researchers, journalists, and lawmakers argue that individual detection alone is not enough."; }
+
+  document.getElementById('quiz-area').innerHTML = `
+    <div class="score-screen">
+      <div class="score-num">${score}/${questions.length}</div>
+      <div class="score-label">You scored ${p}%</div>
+      <div class="verdict">${v}</div>
+      <div class="verdict-sub">${s}</div>
+    </div>
+    <div class="signs-section">
+      <div class="signs-title">Warning signs to look for in AI-generated content</div>
+      <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Skin:</strong> unnaturally smooth, waxy, or pore-free texture</div></div>
+      <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Hair:</strong> strands that blur, merge, or disappear at the edges</div></div>
+      <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Hands:</strong> wrong number of fingers, fused joints, or impossible bends</div></div>
+      <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Eyes:</strong> reflections that don't match, or a glassy unfocused look</div></div>
+      <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Background:</strong> warped structures, repeated objects, or impossible architecture</div></div>
+      <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Language:</strong> AI fake quotes often sound sweeping, confident, and too perfectly phrased</div></div>
+      <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Source:</strong> always verify quotes and claims with a second source before sharing</div></div>
+    </div>
+    <div class="reg-box">
+      Connecticut passed a law in 2025 criminalizing deepfake revenge porn — but broader regulation of AI-generated political content and fake news remains unresolved. State Sen. Saud Anwar of South Windsor warned that failing to act on AI would be "malpractice." As deepfakes become more convincing, the question is no longer whether individuals can spot them — it's whether our laws can keep up.
+    </div>
+    <div style="text-align:center"><button class="restart-btn" onclick="restart()">Try again</button></div>
+  `;
+}
+
+function restart() { current = 0; score = 0; answered = false; render(); }
+render();
+</script>
+</body>
+</html>
