@@ -27,7 +27,7 @@ const questions = [
     prompt: "This face was generated entirely by AI. Which clue is most likely to give it away?",
     choices: ["Perfectly smooth, waxy-looking skin with no visible pores", "The subject is smiling", "The background is blurry", "The lighting looks natural"],
     correct: 0,
-    feedback: "AI-generated faces often have unnaturally smooth skin with no visible pores or blemishes. Real human skin has texture, imperfections, and variation — AI struggles to replicate this convincingly."
+    feedback: "AI-generated faces often have unnaturally smooth skin with no visible pores or blemishes. Real human skin has texture, imperfections, and variation, AI tends to struggle with these slight variations making it a striking tell."
   },
   {
     type: "headline",
@@ -38,14 +38,14 @@ const questions = [
     ],
     choices: ["CT Mirror headline", "Hartford Courant headline"],
     correct: 1,
-    feedback: "The CT Mirror headline is real — Connecticut's Senate did pass that AI bill in 2024. The Courant headline is fabricated. Notice the sweeping language ('all social media', 'banning') — a common pattern in AI-generated political fake news."
+    feedback: "The CT Mirror headline is real, Connecticut's Senate did pass that AI bill in 2024. The Courant headline is fake, notice the use of sweeping language to convey the story."
   },
   {
     type: "image", imgIndex: 1,
     prompt: "AI image generators frequently fail at a specific part of the face. What should you examine here?",
     choices: ["The ears look too small", "Hair strands blend unnaturally into the background or skin", "The eyes are too far apart", "The face is too symmetrical"],
     correct: 1,
-    feedback: "AI generators frequently struggle with hair — especially where it meets skin or a background. Strands may blur, merge, or disappear entirely. This is one of the most reliable tells in AI-generated portraits."
+    feedback: "AI generators frequently struggle with hair, especially when it comes to differentiating it from skin or a background. Strands may blur, merge, or disappear entirely. This is one of the most reliable tells in AI-generated portraits."
   },
   {
     type: "headline",
@@ -56,14 +56,14 @@ const questions = [
     ],
     choices: ["Sen. Anwar quote", "Gov. Lamont quote"],
     correct: 1,
-    feedback: "Sen. Anwar's quote is real and on record from the 2024 CT Senate AI debate. The Lamont quote is fabricated — in reality Lamont repeatedly opposed aggressive AI regulation. AI fakes often use confident, sweeping language that sounds plausible but doesn't match a person's actual record."
+    feedback: "Sen. Anwar's quote is real and on record from the 2024 CT Senate AI debate. The Lamont quote is fabricated. The tells here are once again the sweeping language and if searched there is no record of the quote anywhere."
   },
   {
     type: "image", imgIndex: 2,
     prompt: "All images in this quiz were AI-generated. What is the most common tell in AI background details?",
     choices: ["Backgrounds are always black", "Background details become warped, blurry, or structurally impossible", "Backgrounds are too colorful", "Backgrounds always show outdoor scenes"],
     correct: 1,
-    feedback: "AI struggles with structural coherence in backgrounds — walls may warp, objects repeat strangely, or architecture becomes impossible. When something in the background looks off without a clear reason, that's a strong signal the image may be AI-generated."
+    feedback: "AI struggles with structural coherence in backgrounds: walls may warp, objects repeat strangely, or architecture becomes impossible. When something in the background looks off without a clear reason, that's an indication the image may be AI-generated."
   },
   {
     type: "headline",
@@ -73,7 +73,7 @@ const questions = [
     ],
     choices: ["Real published denial", "AI-generated fake content"],
     correct: 0,
-    feedback: "This is real. After reporter Aaron Pelczar used AI to fabricate a quote from Wyoming's governor in 2024, the governor's office issued exactly this denial after a competing journalist called to verify. The fake AI quote had passed through multiple human editors undetected — illustrating how convincing AI-generated content has become."
+    feedback: "This is real. After reporter Aaron Pelczar used AI to fabricate a quote from Wyoming's governor in 2024. This went completly unnoticed until a competing journalist called the office to check with the governor."
   }
 ];
 
@@ -137,8 +137,8 @@ function results() {
   const p = Math.round((score / questions.length) * 100);
   let v, s;
   if (p >= 80) { v = "Strong result — but don't get overconfident."; s = "You spotted most of the fakes. But deepfake technology improves daily, and even trained experts are regularly fooled. The tells you learned today may not apply to next year's models."; }
-  else if (p >= 50) { v = "About average — and that's the problem."; s = "Most Connecticut residents score similarly. When roughly half of AI-generated content fools us, that's not a personal failure — it's a systemic crisis that requires regulatory solutions, not just individual vigilance."; }
-  else { v = "Difficult, right? That's exactly the point."; s = "You're not alone. Deepfakes are designed to be indistinguishable from reality. The difficulty you experienced is why researchers, journalists, and lawmakers argue that individual detection alone is not enough."; }
+  else if (p >= 50) { v = "About average, and that's the problem."; s = "Most Connecticut residents score similarly. When roughly half of AI-generated content fools us, that's not a personal failure it shows the neccesity for companies to give transparency on what is fake and what isn't"; }
+  else { v = "Difficult, right? That's exactly the point."; s = "You're not alone. Deepfakes are designed to be indistinguishable from reality. The difficulty you experienced is why transparency is neccessary it is simply not enough to train our eyes."; }
 
   document.getElementById('quiz-area').innerHTML = `
     <div class="score-screen">
