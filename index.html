@@ -3,31 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spot the Fake — CT Deepfake Quiz</title>
+<title>Spot the Fake, CT Deepfake Quiz</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="container">
   <div class="site-title">Spot the Fake CT</div>
   <h1>Could you spot a deepfake?</h1>
-  <p class="subtitle">AI-generated images and fake quotes are becoming harder to detect. Take this quiz to test your skills — then learn what to look for.</p>
+  <p class="subtitle">AI-generated images and fake quotes are becoming harder to detect. Take this quiz to test your skills and learn more about deep fake technology.</p>
   <div id="quiz-area"></div>
 </div>
 
 <script>
 const images = [
-  { url: "image1.png", label: "AI-generated portrait — examine the skin and hairline closely" },
-  { url: "image2.png", label: "AI-generated portrait — look at the edges of the face and hair" },
-  { url: "image3.png", label: "AI-generated portrait — pay attention to the background details" }
+  { url: "image1.png", label: "AI-generated portrait" },
+  { url: "image2.png", label: "AI-generated portrait" },
+  { url: "image3.png", label: "AI-generated portrait" }
 ];
 
 const questions = [
   {
     type: "image", imgIndex: 0,
     prompt: "This face was generated entirely by AI. Which clue is most likely to give it away?",
-    choices: ["Perfectly smooth, waxy-looking skin with no visible pores", "The subject is smiling", "The background is blurry", "The lighting looks natural"],
+    choices: ["Smooth, waxy skin", "The subject is smiling", "The background is blurry", "The lighting looks unnatural"],
     correct: 0,
-    feedback: "AI-generated faces often have unnaturally smooth skin with no visible pores or blemishes. Real human skin has texture, imperfections, and variation, AI tends to struggle with these slight variations making it a striking tell."
+    feedback: "AI-generated faces often have unnaturally smooth skin without any blemishes. Real human skin has texture, imperfections, and variation, AI tends to struggle with these slight variations making it a striking tell."
   },
   {
     type: "headline",
@@ -38,14 +38,14 @@ const questions = [
     ],
     choices: ["CT Mirror headline", "Hartford Courant headline"],
     correct: 1,
-    feedback: "The CT Mirror headline is real, Connecticut's Senate did pass that AI bill in 2024. The Courant headline is fake, notice the use of sweeping language to convey the story."
+    feedback: "The CT Mirror headline is real, Connecticut's Senate did pass that AI bill in 2024. The Courant headline is fake, the tell for this being the sweeping language used."
   },
   {
     type: "image", imgIndex: 1,
-    prompt: "AI image generators frequently fail at a specific part of the face. What should you examine here?",
-    choices: ["The ears look too small", "Hair strands blend unnaturally into the background or skin", "The eyes are too far apart", "The face is too symmetrical"],
+    prompt: "AI image generators frequently fail at a specific part of the face, which part gives it away?",
+    choices: ["The ears look too small", "Hair strands blend unnaturally", "The eyes are too far apart", "The face is too symmetrical"],
     correct: 1,
-    feedback: "AI generators frequently struggle with hair, especially when it comes to differentiating it from skin or a background. Strands may blur, merge, or disappear entirely. This is one of the most reliable tells in AI-generated portraits."
+    feedback: "AI generators tend to have trouble with hair with hair typically blending into the background or into the skin."
   },
   {
     type: "headline",
@@ -61,9 +61,9 @@ const questions = [
   {
     type: "image", imgIndex: 2,
     prompt: "All images in this quiz were AI-generated. What is the most common tell in AI background details?",
-    choices: ["Backgrounds are always black", "Background details become warped, blurry, or structurally impossible", "Backgrounds are too colorful", "Backgrounds always show outdoor scenes"],
+    choices: ["Backgrounds are always black", "Background details become warped", "Backgrounds are too colorful", "Backgrounds always show outdoor scenes"],
     correct: 1,
-    feedback: "AI struggles with structural coherence in backgrounds: walls may warp, objects repeat strangely, or architecture becomes impossible. When something in the background looks off without a clear reason, that's an indication the image may be AI-generated."
+    feedback: "AI struggles with background structure details may become warped and make no logical sense."
   },
   {
     type: "headline",
@@ -74,10 +74,140 @@ const questions = [
     choices: ["Real published denial", "AI-generated fake content"],
     correct: 0,
     feedback: "This is real. After reporter Aaron Pelczar used AI to fabricate a quote from Wyoming's governor in 2024. This went completly unnoticed until a competing journalist called the office to check with the governor."
+  },
+  {
+  type: "audio",
+  prompt: "Listen to the first 5 seconds of this clip. Is this Joe Biden's real voice, or an AI voice clone?",
+  audioUrl: "https://www.youtube.com/embed/j-8kSh-Q9Mc",
+  choices: ["Real voice", "AI voice clone"],
+  correct: 1,
+  feedback: "This is the 2024 Biden robo call that fooled many voters in New Hampshire.."
+},
+];
+
+
+let current = 0, score = 0, answered = false;
+
+const replayQuestions = [
+  {
+    prompt: "One of these three images is a real photograph. The other two are AI-generated. Which is real?",
+    images: [
+      { url: "image4.png", label: "Image A" },
+      { url: "real1.png", label: "Image B" },
+      { url: "image6.png", label: "Image C" }
+    ],
+    correct: 1,
+    feedback: "Image B is the real photograph."
+  },
+  {
+    prompt: "One of these three images is a real photograph. The other two are AI-generated. Which is real?",
+    images: [
+      { url: "image9.png", label: "Image A" },
+      { url: "image10.png", label: "Image B" },
+      { url: "real2.png", label: "Image C" }
+    ],
+    correct: 2,
+    feedback: "Image C is the real photograph."
+  },
+  {
+    prompt: "One of these three images is a real photograph. The other two are AI-generated. Which is real?",
+    images: [
+      { url: "real3.png", label: "Image A" },
+      { url: "image11.png", label: "Image B" },
+      { url: "image1.png", label: "Image C" }
+    ],
+    correct: 0,
+    feedback: "Image A is the AI photo."
   }
 ];
 
-let current = 0, score = 0, answered = false;
+let replayMode = false;
+let replayCurrent = 0;
+let replayScore = 0;
+let replayAnswered = false;
+
+function startReplay() {
+  replayMode = true;
+  replayCurrent = 0;
+  replayScore = 0;
+  replayAnswered = false;
+  renderReplay();
+}
+
+function renderReplay() {
+  const q = replayQuestions[replayCurrent];
+  const pct = (replayCurrent / replayQuestions.length) * 100;
+  let html = `
+    <div class="progress-bg"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="q-label">Replay Mode — Round ${replayCurrent + 1} of ${replayQuestions.length}</div>
+    <div class="q-text">${q.prompt}</div>
+    <div class="replay-image-grid">
+  `;
+  q.images.forEach((img, i) => {
+    html += `
+      <div class="replay-img-card" id="rcard-${i}">
+        <img src="${img.url}" alt="${img.label}" onerror="this.style.display='none'"/>
+        <div class="replay-img-label">${img.label}</div>
+        <button class="replay-pick-btn" onclick="replayPick(${i})">This one</button>
+      </div>
+    `;
+  });
+  html += `</div><div id="rfb"></div>`;
+  document.getElementById('quiz-area').innerHTML = html;
+}
+
+function replayPick(i) {
+  if (replayAnswered) return;
+  replayAnswered = true;
+  const q = replayQuestions[replayCurrent];
+  const correct = i === q.correct;
+  if (correct) replayScore++;
+
+  q.images.forEach((_, idx) => {
+    const card = document.getElementById(`rcard-${idx}`);
+    const btn = card.querySelector('.replay-pick-btn');
+    btn.onclick = null;
+    if (idx === q.correct) {
+      card.classList.add('replay-correct');
+      btn.textContent = '✓ Real photo';
+    } else if (idx === i) {
+      card.classList.add('replay-wrong');
+      btn.textContent = '✗ AI-generated';
+    } else {
+      card.classList.add('replay-wrong');
+      btn.textContent = 'AI-generated';
+    }
+  });
+
+  document.getElementById('rfb').innerHTML = `
+    <div class="feedback ${correct ? 'correct' : 'wrong'}">
+      <strong>${correct ? 'Correct!' : 'Not quite.'}</strong> ${q.feedback}
+    </div>
+    <button class="next-btn" onclick="replayNext()">${replayCurrent < replayQuestions.length - 1 ? 'Next round' : 'See results'}</button>
+  `;
+}
+
+function replayNext() {
+  replayCurrent++;
+  replayAnswered = false;
+  if (replayCurrent < replayQuestions.length) renderReplay(); else replayResults();
+}
+
+function replayResults() {
+  const p = Math.round((replayScore / replayQuestions.length) * 100);
+  document.getElementById('quiz-area').innerHTML = `
+    <div class="score-screen">
+      <div class="score-num">${replayScore}/${replayQuestions.length}</div>
+      <div class="score-label">Replay Mode — You scored ${p}%</div>
+      <div class="verdict">${p === 100 ? 'Perfect eye.' : ''}</div>
+      <div class="verdict-sub">${p === 100 ? 'You correctly identified every real photograph. The tells will only get subtler as AI improves.' : 'AI images are designed to fool you.'}</div>
+    </div>
+    <div style="text-align:center;margin-top:1.5rem;display:flex;gap:10px;justify-content:center">
+      <button class="restart-btn" onclick="startReplay()">Replay again</button>
+      <button class="restart-btn" onclick="restart()">Back to main quiz</button>
+    </div>
+  `;
+}
 
 function render() {
   const q = questions[current];
@@ -91,10 +221,17 @@ function render() {
     const img = images[q.imgIndex];
     html += `<div class="image-box">
       <img src="${img.url}" alt="AI generated portrait" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-      <div class="img-error" style="display:none">Image could not load — answer based on what you know about AI tells</div>
+      <div class="img-error" style="display:none">Image could not load</div>
       <div class="img-label">${img.label}</div>
     </div>`;
-  } else {
+  } 
+  else if (q.type === "audio") {
+  html += `<div class="audio-box">
+    <div class="audio-label">🔊 Listen to the first 5 seconds only, then answer below.</div>
+    <iframe width="100%" height="200" src="${q.audioUrl}" frameborder="0" allowfullscreen style="border-radius:8px;margin-top:0.5rem"></iframe>
+  </div>`;
+} 
+  else {
     html += `<div class="headline-box">`;
     q.headlines.forEach(h => {
       html += `<div><div class="headline-source">${h.source}</div><div class="headline-main">"${h.text}"</div></div>`;
@@ -136,9 +273,9 @@ function next() {
 function results() {
   const p = Math.round((score / questions.length) * 100);
   let v, s;
-  if (p >= 80) { v = "Strong result — but don't get overconfident."; s = "You spotted most of the fakes. But deepfake technology improves daily, and even trained experts are regularly fooled. The tells you learned today may not apply to next year's models."; }
-  else if (p >= 50) { v = "About average, and that's the problem."; s = "Most Connecticut residents score similarly. When roughly half of AI-generated content fools us, that's not a personal failure it shows the neccesity for companies to give transparency on what is fake and what isn't"; }
-  else { v = "Difficult, right? That's exactly the point."; s = "You're not alone. Deepfakes are designed to be indistinguishable from reality. The difficulty you experienced is why transparency is neccessary it is simply not enough to train our eyes."; }
+  if (p >= 80) { v = "Strong result"; s = "You spotted most of the fakes, but as deepfake technology gets stronger it will only get more difficult to tell the difference"; }
+  else if (p >= 50) { v = "About average, and that's the problem."; s = "AI technology is very convincing and that's not a personal failure it shows the necessity for companies to give transparency on what is fake and what isn't"; }
+  else { v = "Difficult, right?"; s = "Deepfakes are designed to be very close to reality. The difficulty you experienced is why transparency is necessary it is simply not enough to train our eyes."; }
 
   document.getElementById('quiz-area').innerHTML = `
     <div class="score-screen">
@@ -156,7 +293,11 @@ function results() {
       <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Background:</strong> warped structures, repeated objects, or impossible architecture</div></div>
       <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Language:</strong> AI fake quotes often sound sweeping, confident, and too perfectly phrased</div></div>
       <div class="sign-item"><div class="sign-dot"></div><div class="sign-text"><strong>Source:</strong> always verify quotes and claims with a second source before sharing</div></div>
-    <div style="text-align:center"><button class="restart-btn" onclick="restart()">Try again</button></div>
+    </div>
+    <div style="text-align:center;margin-top:1.5rem;display:flex;gap:10px;justify-content:center">
+      <button class="restart-btn" onclick="restart()">Try again</button>
+      <button class="restart-btn" onclick="startReplay()">Replay mode, spot the real phot</button>
+    </div>
   `;
 }
 

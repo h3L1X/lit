@@ -312,8 +312,72 @@ h1 {
   background: #f5f5f5;
 }
 
+.audio-box {
+  background: #f8f8f8;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.audio-label {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.replay-image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.replay-img-card {
+  border: 1.5px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 0.75rem;
+  text-align: center;
+  background: #f8f8f8;
+  transition: border-color 0.2s;
+}
+
+.replay-img-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.replay-img-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.replay-pick-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+
+.replay-pick-btn:hover { background: #f0f0f0; }
+.replay-img-card.replay-correct { border-color: #16a34a; background: #f0fdf4; }
+.replay-img-card.replay-wrong { border-color: #dc2626; background: #fef2f2; }
+
 @media (max-width: 480px) {
   .choice-grid {
+    grid-template-columns: 1fr;
+  }
+  .replay-image-grid {
     grid-template-columns: 1fr;
   }
 }
